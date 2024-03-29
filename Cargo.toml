@@ -1,0 +1,10 @@
+[package]
+name = "og-cd-iced-explorer"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+og_lib_cdi = { path = "../og_lib_cdi" }
+iced = "0.12.1"
