@@ -27,7 +27,7 @@ impl Application for App {
     }
 
     fn title(&self) -> String {
-        String::from("A cool application")
+        String::from("OG CD-Iced Explorer")
     }
 
     fn update(&mut self, _message: AppMessage) -> Command<AppMessage> {
