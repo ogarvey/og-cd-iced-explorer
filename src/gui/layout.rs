@@ -1,31 +1,32 @@
 use crate::gui::app_messages::{AppMessage, Page};
-use iced::widget::{button, text, Column, Row};
-use iced::Element;
-
+use iced::widget::{button, column, container, text, Column, Row};
+use iced::{Element, Length};
+use og_lib_cdi::data::cdi_file;
+use crate::App;
 use super::controls::navigation::render_nav;
+use super::views::analysis_view::{self, AnalysisView, render_analysis_view};
 
-pub fn render_layout(page: Page) -> Element<'static, AppMessage> {
-    let nav = render_nav(page);
-    let row: Row<AppMessage> = match page {
-        Page::Main => {
-            Row::new().push(text("Main page")).into()
-        }
-        Page::Analysis => {
-            let text = text::Text::new("Analysis page");
-            Row::new().push(text).into()
-        }
-        Page::ImageManagement => {
-            let text = text::Text::new("Image management page");
-            Row::new().push(text).into()
-        }
-        Page::AudioManagement => {
-            let text = text::Text::new("Audio management page");
-            Row::new().push(text).into()
-        }
-        Page::Settings => {
-            let text = text::Text::new("Settings page");
-            Row::new().push(text).into()
-        }
+pub fn render_layout(app: App) -> Element<'static, AppMessage> {
+   
+    let nav = render_nav(app.current_page);
+    match app.current_page {
+      Page::Analysis => {
+          let cdi_file = app.cdi_file.clone().unwrap();
+          let analysis_view = AnalysisView::new(cdi_file);
+          return column![nav,render_analysis_view(&analysis_view)].padding(10).into();
+      },
+      Page::Main => {
+        return column![nav, text("Main Page")].padding(10).into();
+      },
+      Page::ImageManagement => {
+        return column![nav, text("Image Management Page")].padding(10).into();
+      },
+      Page::AudioManagement => {
+        return column![nav, text("Audio Management Page")].padding(10).into();
+      }
+      Page::Settings => {
+        return column![nav, text("Settings Page")].padding(10).into();
+      }
     };
-    Column::new().push(nav).push(row).into()
+        
 }
