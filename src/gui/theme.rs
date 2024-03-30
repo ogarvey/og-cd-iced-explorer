@@ -1,5 +1,13 @@
 use iced::{border::Radius, widget::button, Color};
 
+pub struct CyanTextStyle;
+
+impl CyanTextStyle {
+    pub fn new() -> iced::theme::Text {
+        iced::theme::Text::Color(Color::WHITE)
+    }
+}
+
 pub struct CyanButtonStyleSheet;
 
 impl CyanButtonStyleSheet {
@@ -20,7 +28,7 @@ impl button::StyleSheet for CyanButtonStyleSheet {
             border: iced::Border {
                 color: Color::from_rgba8(0, 255, 255,255.0),
                 width: 1.0,
-                radius: Radius::from(5.0),
+                radius: 5.0.into(),
             },
             ..Default::default()
         }

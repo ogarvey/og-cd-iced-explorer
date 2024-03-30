@@ -5,8 +5,22 @@ use iced::{Application, Command, Element, Settings, Theme};
 use og_lib_cdi::data::cdi_file::CdiFile;
 mod gui;
 
+static ICON: &[u8] = include_bytes!("./assets/icon.png");
+const ICON_WIDTH: u32 = 256;
+const ICON_HEIGHT: u32 = 256;
+
 pub fn main() -> iced::Result {
-    App::run(Settings::default())
+    let image = image::load_from_memory(ICON).unwrap();
+    let icon = iced::window::icon::from_rgba(image.as_bytes().to_vec(), ICON_WIDTH, ICON_HEIGHT).unwrap();
+    
+    let settings = iced::settings::Settings {
+        window: iced::window::Settings {
+            icon: Some(icon), 
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    App::run(settings)
 }
 
 #[derive(Clone)]

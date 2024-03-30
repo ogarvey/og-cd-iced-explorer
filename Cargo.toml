@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 og_lib_cdi = { path = "../og_lib_cdi" }
 iced = "0.12.1"
+image = "0.25.0"

@@ -1,6 +1,6 @@
 use iced::{
-    widget::row,
-    Element,
+    widget::{row, Scrollable},
+    Element, Length,
 };
 use og_lib_cdi::data::{cdi_file::CdiFile, CdiSectorType};
 
@@ -22,6 +22,8 @@ pub fn render_analysis_view(analysis_view: &AnalysisView) -> Element<'static, Ap
     let audio_sectors = cdi_file.get_audio_sectors();
     let video_sectors = cdi_file.get_video_sectors();
 
+    let all_sectors = cdi_file.sectors();
+
     let data_sector_count = data_sectors.len();
     let audio_sector_count = audio_sectors.len();
     let video_sector_count = video_sectors.len();
@@ -37,9 +39,27 @@ pub fn render_analysis_view(analysis_view: &AnalysisView) -> Element<'static, Ap
     let video_container =
         crate::gui::controls::analysis::cdifile_overview::render_overview(video_overview);
 
-    row!(video_container, audio_container, data_container)
-        .height(100)
-        .padding(10).into()
+    let overview_row = row!(video_container, audio_container, data_container)
+        .height(100);
 
+    let sector_rows = all_sectors.iter().map(|sector| {
+        let sector_type = match sector.get_sector_type() {
+            CdiSectorType::Data => "Data",
+            CdiSectorType::Audio => "Audio",
+            CdiSectorType::Video => "Video",
+            CdiSectorType::Empty => "Empty",
+            CdiSectorType::Message => "Message",
+        };
+        let sector_text = format!("{} Sector", sector_type);
+        let sector_text = iced::widget::Text::new(sector_text).size(20);
+        let sector_number = iced::widget::Text::new(format!(" {}", sector.sector_index())).size(20);
+        row![sector_text, sector_number].into()
+    });
+
+    let sector_rows = iced::widget::Column::with_children(sector_rows).spacing(10);
     
+    let column = iced::widget::Column::with_children(vec![overview_row.into(), sector_rows.into()])
+        .padding(10);
+    // display in scrollable
+    Scrollable::new(column).width(Length::Fill).into()
 }
