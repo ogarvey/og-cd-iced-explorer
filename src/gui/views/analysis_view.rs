@@ -39,7 +39,7 @@ pub fn render_analysis_view(analysis_view: &AnalysisView) -> Element<'static, Ap
 
     row!(video_container, audio_container, data_container)
         .height(100)
-        .padding(10)
-        .spacing(10)
-        .into()
+        .padding(10).into()
+
+    
 }

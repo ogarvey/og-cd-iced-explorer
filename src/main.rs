@@ -16,6 +16,7 @@ struct App {
     // Your application state goes here
     pub cdi_file: Option<CdiFile>,
     current_page: Page,
+    theme: Theme,
 }
 
 impl App {
@@ -35,6 +36,7 @@ impl Application for App {
             App {
                 cdi_file: None,
                 current_page: Page::Main,
+                theme: Theme::Dark,
             },
             Command::none(),
         )
@@ -60,6 +62,10 @@ impl Application for App {
             }
         }
         Command::none()
+    }
+
+    fn theme(&self) -> Self::Theme {
+        self.theme.clone()
     }
 
     fn view(&self) -> Element<'_, AppMessage> {
