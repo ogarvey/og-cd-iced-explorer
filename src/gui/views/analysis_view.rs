@@ -1,5 +1,5 @@
 use iced::{
-    widget::{container, row, Column, Row, Text},
+    widget::row,
     Element,
 };
 use og_lib_cdi::data::{cdi_file::CdiFile, CdiSectorType};

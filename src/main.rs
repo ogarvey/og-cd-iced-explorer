@@ -1,8 +1,6 @@
 use gui::app_messages::{AppMessage, Page};
-use gui::controls::analysis;
 use gui::layout::render_layout;
 use iced::executor;
-use iced::widget::{button, column, text, Column};
 use iced::{Application, Command, Element, Settings, Theme};
 use og_lib_cdi::data::cdi_file::CdiFile;
 mod gui;
@@ -17,12 +15,7 @@ struct App {
     pub cdi_file: Option<CdiFile>,
     current_page: Page,
     theme: Theme,
-}
-
-impl App {
-    pub fn get_cdi_file(&self) -> Option<CdiFile> {
-        self.cdi_file.clone()
-    }
+    //active_pages: Vec<Page>,
 }
 
 impl Application for App {
@@ -37,6 +30,8 @@ impl Application for App {
                 cdi_file: None,
                 current_page: Page::Main,
                 theme: Theme::Dark,
+                // initially, no pages are active
+                //active_pages: Vec::new(),
             },
             Command::none(),
         )
@@ -51,10 +46,11 @@ impl Application for App {
             AppMessage::ChangePage(page) => {
                 match page {
                     Page::Analysis => {
-                        // Load the cdi file
-                        let cdi_file = CdiFile::new("C:/Dev/Projects/Gaming/CD-i/Disc Images/Extracted/Plunderball/Intro.rtr".to_string());
-                        self.cdi_file = Some(cdi_file);
-                        //render_layout(page);
+                        // Load the cdi file if it hasn't been loaded yet
+                        if self.cdi_file.is_none() {
+                            let cdi_file = CdiFile::new("C:/Dev/Projects/Gaming/CD-i/Disc Images/Extracted/Plunderball/Intro.rtr".to_string());
+                            self.cdi_file = Some(cdi_file);
+                        }
                     }
                     _ => {}
                 }

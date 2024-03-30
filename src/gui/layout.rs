@@ -1,10 +1,9 @@
 use crate::gui::app_messages::{AppMessage, Page};
-use iced::widget::{button, column, container, text, Column, Row};
-use iced::{Element, Length};
-use og_lib_cdi::data::cdi_file;
+use iced::widget::{column, text};
+use iced::Element;
 use crate::App;
 use super::controls::navigation::render_nav;
-use super::views::analysis_view::{self, AnalysisView, render_analysis_view};
+use super::views::analysis_view::{ AnalysisView, render_analysis_view};
 
 pub fn render_layout(app: App) -> Element<'static, AppMessage> {
    

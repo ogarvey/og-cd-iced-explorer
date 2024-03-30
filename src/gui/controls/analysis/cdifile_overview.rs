@@ -1,4 +1,4 @@
-use iced::{border::Radius, widget::{column, container, text, vertical_space, Column, Text}, Alignment, Border, Color, Element};
+use iced::{border::Radius, widget::{column, container, text, vertical_space}, Alignment, Border, Color, Element};
 use og_lib_cdi::data::CdiSectorType;
 
 use crate::gui::app_messages::AppMessage;
