@@ -1,10 +1,13 @@
 use iced::{
-    widget::{row, Scrollable},
+    widget::{row, scrollable::Properties, Scrollable},
     Element, Length,
 };
-use og_lib_cdi::data::{cdi_file::CdiFile, CdiSectorType};
+use og_lib_cdi::data::{cdi_file::CdiFile, cdi_sector::CdiSector, CdiSectorType};
 
-use crate::gui::{app_messages::AppMessage, controls::analysis::cdifile_overview::CdiFileOverview};
+use crate::gui::{
+    app_messages::AppMessage,
+    controls::{analysis::cdifile_overview::CdiFileOverview, data_grid::DataGrid},
+};
 
 pub struct AnalysisView {
     cdi_file: CdiFile,
@@ -39,27 +42,38 @@ pub fn render_analysis_view(analysis_view: &AnalysisView) -> Element<'static, Ap
     let video_container =
         crate::gui::controls::analysis::cdifile_overview::render_overview(video_overview);
 
-    let overview_row = row!(video_container, audio_container, data_container)
-        .height(100);
+    let overview_row = row!(video_container, audio_container, data_container).height(100);
 
-    let sector_rows = all_sectors.iter().map(|sector| {
-        let sector_type = match sector.get_sector_type() {
-            CdiSectorType::Data => "Data",
-            CdiSectorType::Audio => "Audio",
-            CdiSectorType::Video => "Video",
-            CdiSectorType::Empty => "Empty",
-            CdiSectorType::Message => "Message",
-        };
-        let sector_text = format!("{} Sector", sector_type);
-        let sector_text = iced::widget::Text::new(sector_text).size(20);
-        let sector_number = iced::widget::Text::new(format!(" {}", sector.sector_index())).size(20);
-        row![sector_text, sector_number].into()
-    });
+    // let sector_rows = all_sectors.iter().map(|sector| {
+    //     let sector_type = match sector.get_sector_type() {
+    //         CdiSectorType::Data => "Data",
+    //         CdiSectorType::Audio => "Audio",
+    //         CdiSectorType::Video => "Video",
+    //         CdiSectorType::Empty => "Empty",
+    //         CdiSectorType::Message => "Message",
+    //     };
+    //     let sector_text = format!("{} Sector", sector_type);
+    //     let sector_text = iced::widget::Text::new(sector_text).size(20);
+    //     let sector_number = iced::widget::Text::new(format!(" {}", sector.sector_index())).size(20);
+    //     row![sector_text, sector_number].into()
+    // });
 
-    let sector_rows = iced::widget::Column::with_children(sector_rows).spacing(10);
-    
-    let column = iced::widget::Column::with_children(vec![overview_row.into(), sector_rows.into()])
-        .padding(10);
+    // let sector_rows = iced::widget::Column::with_children(sector_rows).spacing(10);
+
+    // let column = iced::widget::Column::with_children(vec![overview_row.into(), sector_rows.into()])
+    //     .padding(10);
     // display in scrollable
-    Scrollable::new(column).width(Length::Fill).into()
+    let data_grid = DataGrid::<CdiSector> {
+        items: all_sectors.to_vec(),
+    };
+    let column =
+        iced::widget::Column::with_children(vec![overview_row.into(), data_grid.view().into()])
+            .padding(10);
+    Scrollable::new(column)
+        .direction(iced::widget::scrollable::Direction::Both {
+            vertical: Properties::default(),
+            horizontal: Properties::default(),
+        })
+        .width(Length::Fill)
+        .into()
 }
